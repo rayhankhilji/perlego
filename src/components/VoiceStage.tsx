@@ -1,4 +1,4 @@
-import { useConversation } from "@elevenlabs/react";
+import { ConversationProvider, useConversation } from "@elevenlabs/react";
 import { useServerFn } from "@tanstack/react-start";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Mic, MicOff, Loader2 } from "lucide-react";
@@ -32,6 +32,14 @@ Do not ask further questions.
 `;
 
 export function VoiceStage(props: Props) {
+  return (
+    <ConversationProvider>
+      <VoiceStageInner {...props} />
+    </ConversationProvider>
+  );
+}
+
+function VoiceStageInner(props: Props) {
   const fetchToken = useServerFn(getVoiceToken);
   const [lines, setLines] = useState<Line[]>([]);
   const [status, setStatus] = useState<"idle" | "connecting" | "live" | "error">("idle");
