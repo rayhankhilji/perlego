@@ -61,10 +61,12 @@ export function SwipeDeck({ deck, onDone }: Props) {
   const turningRight = exit ? exit === "left" : drag <= 0;
   const decisionOffset = exit === "right" ? 180 : exit === "left" ? -180 : drag;
   const decisionOpacity = Math.max(0, Math.min(1, Math.abs(decisionOffset) / 120));
-  const bookStyle: CSSProperties & Record<"--book-accent" | "--page-turn" | "--turn-opacity", string> = {
+  const pageContentOpacity = Math.max(0, Math.min(1, (84 - Math.abs(turn)) / 18));
+  const bookStyle: CSSProperties & Record<"--book-accent" | "--page-turn" | "--turn-opacity" | "--page-content-opacity", string> = {
     "--book-accent": book.accent,
     "--page-turn": `${turn}deg`,
     "--turn-opacity": `${Math.min(1, Math.abs(turn) / 24)}`,
+    "--page-content-opacity": `${pageContentOpacity}`,
   };
 
   return (
