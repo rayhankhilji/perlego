@@ -49,7 +49,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
   const rotation = offset / 24;
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-md flex-col px-5 py-8">
+    <div className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center px-5 py-8">
       <header className="mb-5 flex items-center justify-between text-xs uppercase tracking-[0.2em] text-muted-foreground">
         <span>One page each</span>
         <span>
@@ -66,7 +66,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
         ))}
       </div>
 
-      <div className="relative flex-1">
+      <div className="relative mx-auto w-full max-h-[640px] min-h-[420px] flex-1">
         {deck[index + 1] && (
           <article className="absolute inset-0 scale-[0.97] rounded-3xl bg-card/40 shadow-xl" />
         )}
