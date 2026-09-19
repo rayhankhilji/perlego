@@ -294,23 +294,24 @@ body {
   background: linear-gradient(90deg, var(--book-paper), var(--book-paper-deep));
 }
 
-.book-leaf-mark {
+.book-leaf-content {
   position: absolute;
-  right: 1.1rem;
-  bottom: 1rem;
-  font-family: var(--font-display);
-  font-size: 0.72rem;
-  opacity: 0.4;
+  inset: 0;
+  padding: clamp(1.15rem, 3.5vw, 2.7rem);
 }
 
-.turn-from-left .book-leaf-mark {
-  right: auto;
-  left: 1.1rem;
-  text-transform: uppercase;
-  font-family: var(--font-body);
-  font-size: 0.55rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+.book-leaf-excerpt,
+.book-leaf-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.book-leaf-excerpt .book-copy {
+  margin: auto 0;
+}
+
+.book-leaf-title {
+  justify-content: space-between;
 }
 
 .decision-badge {
@@ -353,6 +354,7 @@ body {
 @media (max-width: 520px) {
   .book-stage { min-height: min(31rem, 61vh); }
   .book-verso, .book-recto { padding: 1.1rem; }
+  .book-leaf-content { padding: 1.1rem; }
   .book-kicker span:last-child { display: none; }
   .book-copy { font-size: clamp(0.76rem, 3.15vw, 0.95rem); line-height: 1.5; }
 }

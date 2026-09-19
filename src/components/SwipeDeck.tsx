@@ -33,7 +33,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
         setDrag(0);
         if (index + 1 >= deck.length) onDone(verdicts.current);
         else setIndex(index + 1);
-      }, 260);
+      }, 360);
     },
     [deck, index, exit, onDone],
   );
@@ -140,7 +140,26 @@ export function SwipeDeck({ deck, onDone }: Props) {
               aria-hidden="true"
             >
               <div className="book-turning-page-front">
-                <span className="book-leaf-mark">{turningRight ? String(index + 17).padStart(2, "0") : TRACK_LABELS[book.track]}</span>
+                {turningRight ? (
+                  <div className="book-leaf-content book-leaf-excerpt">
+                    <span className="book-running-head">A page to try</span>
+                    <p className="font-display book-copy">{book.page}</p>
+                    <span className="book-page-number">{String(index + 17).padStart(2, "0")}</span>
+                  </div>
+                ) : (
+                  <div className="book-leaf-content book-leaf-title">
+                    <div className="book-kicker">
+                      <span>{TRACK_LABELS[book.track]}</span>
+                      <span>{book.year}</span>
+                    </div>
+                    <div>
+                      <div className="book-rule" />
+                      <p className="font-display mt-4 text-[clamp(1.55rem,4vw,2.7rem)] leading-[0.98]">{book.title}</p>
+                      <p className="mt-3 text-xs opacity-60 sm:text-sm">{book.author}</p>
+                    </div>
+                    <p className="font-display text-base italic leading-snug text-book-accent sm:text-xl">{book.hook}</p>
+                  </div>
+                )}
               </div>
               <div className="book-turning-page-back" />
             </div>
