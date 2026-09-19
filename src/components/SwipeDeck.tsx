@@ -39,7 +39,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
         requestAnimationFrame(() =>
           requestAnimationFrame(() => setResetting(false)),
         );
-      }, 430);
+    }, 540);
     },
     [deck, index, exit, onDone],
   );
