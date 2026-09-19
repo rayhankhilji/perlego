@@ -62,57 +62,8 @@ export function Paywall({ v }: { v: Vals }) {
         ))}
       </div>
 
-      <div style={sx("padding:30px 52px 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,340px);gap:28px")}>
-        <div style={sx("display:flex;flex-direction:column;gap:12px")}>
-          <span style={sx("font:600 13px Manrope,sans-serif;color:#383838")}>How the trial works</span>
-          {v.timeline.map((t, i) => (
-            <div key={i} style={sx("display:flex;gap:12px")}>
-              <span style={sx("display:flex;flex-direction:column;align-items:center;flex:none")}>
-                <span style={t.dotStyle} />
-                <span style={t.lineStyle} />
-              </span>
-              <span style={sx("display:flex;flex-direction:column;gap:2px;padding-bottom:14px")}>
-                <span style={sx("font:600 13.5px Inter,sans-serif;color:#2c2c2c")}>{t.when}</span>
-                <span style={sx("font:400 13.5px/1.6 Inter,sans-serif;color:#666565")}>{t.what}</span>
-              </span>
-            </div>
-          ))}
-        </div>
-        <div
-          style={sx(
-            "display:flex;flex-direction:column;gap:11px;padding:22px;border-radius:14px;background:#f9f8f6;border:1px solid #e9e7e3;height:fit-content",
-          )}
-        >
-          <span style={sx("font:600 13px Manrope,sans-serif;color:#383838")}>Included on every plan</span>
-          {v.perks.map((p, i) => (
-            <span key={i} style={sx("font:400 13.5px/1.6 Inter,sans-serif;color:#4e4e4e")}>
-              {p.text}
-            </span>
-          ))}
-          <span style={sx("font:400 12.5px/1.55 Inter,sans-serif;color:#777674;padding-top:8px;border-top:1px solid #e9e7e3")}>
-            In print, the books you kept would cost about {v.printCost}.
-          </span>
-        </div>
-      </div>
+      <div style={sx("padding:34px 52px 0;display:flex;gap:22px;flex-wrap:wrap;align-items:center")}>
 
-      <div style={sx("padding:32px 52px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px")}>
-        {v.quotes.map((q) => (
-          <div
-            key={q.name}
-            style={sx(
-              "display:flex;flex-direction:column;gap:10px;padding:20px;border-radius:12px;background:#fff;border:1px solid #e9e7e3",
-            )}
-          >
-            <span style={sx("font:400 13.5px/1.65 Inter,sans-serif;color:#383838")}>{q.text}</span>
-            <span style={sx("display:flex;flex-direction:column;gap:1px;padding-top:6px;border-top:1px solid #f0efec")}>
-              <span style={sx("font:600 13px Inter,sans-serif;color:#2c2c2c")}>{q.name}</span>
-              <span style={sx("font:400 12px Inter,sans-serif;color:#777674")}>{q.role}</span>
-            </span>
-          </div>
-        ))}
-      </div>
-
-      <div style={sx("padding:26px 52px 0;display:flex;gap:22px;flex-wrap:wrap;align-items:center")}>
         {v.partners.map((p) => (
           <span key={p.name} style={sx("font:500 12.5px Inter,sans-serif;color:#b2b1ae")}>
             {p.name}
