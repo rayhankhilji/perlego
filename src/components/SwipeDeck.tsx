@@ -126,7 +126,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
           <div className="book-pages" aria-hidden="true" />
           <div className="book-cover-edge" aria-hidden="true" />
           <div className="book-spread">
-            <section className={`book-verso ${dragging || exit ? (!turningRight ? "book-page-text-hidden" : "") : ""}`}>
+            <section className="book-verso">
               <div className="book-kicker">
                 <span>{TRACK_LABELS[book.track]}</span>
                 <span>{book.year}</span>
@@ -143,7 +143,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
               </p>
             </section>
 
-            <section className={`book-recto ${dragging || exit ? (turningRight ? "book-page-text-hidden" : "") : ""}`}>
+            <section className="book-recto">
               <span className="book-running-head">A page to try</span>
               <p className="font-display book-copy">{book.page}</p>
               <span className="book-page-number">{String(index + 17).padStart(2, "0")}</span>
