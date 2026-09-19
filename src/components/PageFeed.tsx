@@ -83,7 +83,7 @@ export function PageFeed({ deck, onDone }: Props) {
 
   return (
     <div
-      className="relative flex h-[100dvh] w-full touch-none items-center justify-center px-5 pb-20 pt-14"
+      className="relative flex h-[100dvh] w-full touch-none flex-col items-center justify-center gap-5 px-5 pb-16 pt-14"
       style={style}
       onPointerDown={(event) => {
         startY.current = event.clientY;
@@ -114,9 +114,7 @@ export function PageFeed({ deck, onDone }: Props) {
         ))}
       </div>
 
-      <article className="feed-page">
-        <div className="feed-page-edge" aria-hidden="true" />
-
+      <article className="feed-page min-h-0">
         {book ? (
           <div key={book.id} className={`feed-turn ${dir === 1 ? "feed-turn--down" : "feed-turn--up"}`}>
             <div className="book-kicker">
