@@ -139,23 +139,8 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
       <aside className={"pgr-panel" + (panel ? " is-open" : "")}>
         {book ? (
           <>
-            <img
-              key={book.gid}
-              src={book.cover}
-              alt={`Cover of ${book.title}`}
-              onError={(e) => {
-                const img = e.currentTarget;
-                if (img.dataset['fallback']) {
-                  img.style.display = "none";
-                  return;
-                }
-                img.dataset['fallback'] = "1";
-                img.src = book.thumb;
-              }}
-              style={sx(
-                "width:118px;height:auto;border-radius:3px;background:#e9e7e3;box-shadow:0 2px 10px rgba(44,44,44,.18)",
-              )}
-            />
+            <Cover book={book} />
+
             <div>
               <span
                 style={{
