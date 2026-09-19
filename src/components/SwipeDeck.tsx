@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { Heart, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Book } from "@/lib/books";
@@ -54,6 +54,13 @@ export function SwipeDeck({ deck, onDone }: Props) {
   const dragProgress = Math.max(-1, Math.min(1, drag / 180));
   const turn = exit ? (exit === "right" ? -148 : 148) : dragProgress * -38;
   const decisionOpacity = Math.max(0, Math.min(1, Math.abs(offset) / 120));
+  const bookStyle: CSSProperties & Record<"--book-accent" | "--page-turn" | "--turn-opacity", string> = {
+    transform: `translateX(${offset}px) rotate(${rotation}deg)`,
+    transition: exit || drag === 0 ? "transform 260ms ease-out" : "none",
+    "--book-accent": book.accent,
+    "--page-turn": `${turn}deg`,
+    "--turn-opacity": `${Math.min(0.2, Math.abs(turn) / 190)}`,
+  };
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col justify-center px-4 py-6 sm:px-8 sm:py-8">
@@ -100,12 +107,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
             startX.current = null;
             setDrag(0);
           }}
-          style={{
-            transform: `translateX(${offset}px) rotate(${rotation}deg)`,
-            transition: exit || drag === 0 ? "transform 260ms ease-out" : "none",
-            "--book-accent": book.accent,
-            "--page-turn": `${turn}deg`,
-          }}
+          style={bookStyle}
           className="book absolute inset-0 touch-none cursor-grab text-card-foreground active:cursor-grabbing"
         >
           <div className="book-pages" aria-hidden="true" />

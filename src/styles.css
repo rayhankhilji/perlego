@@ -135,6 +135,7 @@ body {
 
 .book {
   --page-turn: 0deg;
+  --turn-opacity: 0;
   --book-accent: var(--primary);
   transform-style: preserve-3d;
   filter: drop-shadow(0 1.5rem 2rem oklch(0 0 0 / 28%));
@@ -258,7 +259,7 @@ body {
   transform-origin: left center;
   transform-style: preserve-3d;
   background: linear-gradient(90deg, var(--book-paper-deep), var(--book-paper) 14%, var(--book-paper));
-  opacity: min(0.2, calc(abs(var(--page-turn)) / 360));
+  opacity: var(--turn-opacity);
   pointer-events: none;
 }
 
