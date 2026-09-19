@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Heart, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { Book } from "@/lib/books";
 import { TRACK_LABELS } from "@/lib/books";
 import type { Verdict } from "@/lib/deck";
@@ -13,6 +14,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
   const [index, setIndex] = useState(0);
   const [drag, setDrag] = useState(0);
   const [exit, setExit] = useState<"left" | "right" | null>(null);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const verdicts = useRef<Verdict[]>([]);
   const startX = useRef<number | null>(null);
 
@@ -22,8 +24,10 @@ export function SwipeDeck({ deck, onDone }: Props) {
     (liked: boolean) => {
       const current = deck[index];
       if (!current || exit) return;
+      setHasInteracted(true);
       verdicts.current = [...verdicts.current, { id: current.id, liked }];
       setExit(liked ? "right" : "left");
+      if ("vibrate" in navigator) navigator.vibrate(18);
       window.setTimeout(() => {
         setExit(null);
         setDrag(0);
@@ -45,11 +49,14 @@ export function SwipeDeck({ deck, onDone }: Props) {
 
   if (!book) return null;
 
-  const offset = exit === "right" ? 600 : exit === "left" ? -600 : drag;
-  const rotation = offset / 24;
+  const offset = exit === "right" ? 900 : exit === "left" ? -900 : drag;
+  const rotation = Math.max(-9, Math.min(9, offset / 28));
+  const dragProgress = Math.max(-1, Math.min(1, drag / 180));
+  const turn = exit ? (exit === "right" ? -148 : 148) : dragProgress * -38;
+  const decisionOpacity = Math.max(0, Math.min(1, Math.abs(offset) / 120));
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center px-5 py-8">
+    <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col justify-center px-4 py-6 sm:px-8 sm:py-8">
       <header className="mb-5 flex items-center justify-between text-xs uppercase tracking-[0.2em] text-muted-foreground">
         <span>One page each</span>
         <span>
@@ -66,14 +73,16 @@ export function SwipeDeck({ deck, onDone }: Props) {
         ))}
       </div>
 
-      <div className="relative mx-auto w-full max-h-[640px] min-h-[420px] flex-1">
+      <div className="book-stage relative mx-auto w-full max-w-3xl flex-1">
         {deck[index + 1] && (
-          <article className="absolute inset-0 scale-[0.97] rounded-3xl bg-card/40 shadow-xl" />
+          <div className="book-shadow absolute inset-x-5 inset-y-3 rounded-sm" aria-hidden="true" />
         )}
 
         <article
+          aria-label={`Sample page from ${book.title} by ${book.author}. Swipe right to keep or left to pass.`}
           onPointerDown={(event) => {
             startX.current = event.clientX;
+            setHasInteracted(true);
             event.currentTarget.setPointerCapture(event.pointerId);
           }}
           onPointerMove={(event) => {
@@ -87,68 +96,88 @@ export function SwipeDeck({ deck, onDone }: Props) {
             if (Math.abs(delta) > 110) commit(delta > 0);
             else setDrag(0);
           }}
+          onPointerCancel={() => {
+            startX.current = null;
+            setDrag(0);
+          }}
           style={{
             transform: `translateX(${offset}px) rotate(${rotation}deg)`,
             transition: exit || drag === 0 ? "transform 260ms ease-out" : "none",
-            borderTopColor: book.accent,
+            "--book-accent": book.accent,
+            "--page-turn": `${turn}deg`,
           }}
-          className="absolute inset-0 flex touch-none cursor-grab flex-col overflow-hidden rounded-3xl border-t-4 bg-card px-7 py-8 text-card-foreground shadow-2xl active:cursor-grabbing"
+          className="book absolute inset-0 touch-none cursor-grab text-card-foreground active:cursor-grabbing"
         >
-          <div className="flex items-baseline justify-between text-[0.65rem] uppercase tracking-[0.18em] text-card-foreground/50">
-            <span>{TRACK_LABELS[book.track]}</span>
-            <span>{book.year}</span>
-          </div>
+          <div className="book-pages" aria-hidden="true" />
+          <div className="book-cover-edge" aria-hidden="true" />
+          <div className="book-spread">
+            <section className="book-verso">
+              <div className="book-kicker">
+                <span>{TRACK_LABELS[book.track]}</span>
+                <span>{book.year}</span>
+              </div>
+              <div>
+                <div className="book-rule" />
+                <h2 className="font-display mt-4 text-[clamp(1.55rem,4vw,2.7rem)] leading-[0.98]">
+                  {book.title}
+                </h2>
+                <p className="mt-3 text-xs text-card-foreground/60 sm:text-sm">{book.author}</p>
+              </div>
+              <p className="font-display text-base italic leading-snug text-book-accent sm:text-xl">
+                {book.hook}
+              </p>
+            </section>
 
-          <h2 className="font-display mt-3 text-3xl leading-tight">{book.title}</h2>
-          <p className="mt-1 text-sm text-card-foreground/60">{book.author}</p>
+            <section className="book-recto">
+              <span className="book-running-head">A page to try</span>
+              <p className="font-display book-copy">{book.page}</p>
+              <span className="book-page-number">{String(index + 17).padStart(2, "0")}</span>
+            </section>
 
-          <p
-            className="font-display mt-4 text-lg italic"
-            style={{ color: book.accent }}
-          >
-            {book.hook}
-          </p>
-
-          <div className="mt-5 flex-1 overflow-hidden">
-            <p className="font-display text-[1.05rem] leading-[1.7] text-card-foreground/90">
-              {book.page}
-            </p>
+            <div
+              className={`book-turning-page ${!hasInteracted && index === 0 ? "book-page-cue" : ""}`}
+              aria-hidden="true"
+            >
+              <div className="book-turning-page-back" />
+            </div>
+            <div className="book-gutter" aria-hidden="true" />
           </div>
 
           <div
-            className="pointer-events-none absolute right-6 top-6 rounded-full border-2 px-3 py-1 text-xs font-bold uppercase tracking-widest transition-opacity"
-            style={{ opacity: Math.max(0, Math.min(1, offset / 120)), borderColor: "#2f8a4a", color: "#2f8a4a" }}
+            className="decision-badge decision-keep"
+            style={{ opacity: offset > 0 ? decisionOpacity : 0 }}
           >
-            Keep
+            <Heart className="h-4 w-4" /> Keep
           </div>
           <div
-            className="pointer-events-none absolute left-6 top-6 rounded-full border-2 px-3 py-1 text-xs font-bold uppercase tracking-widest transition-opacity"
-            style={{ opacity: Math.max(0, Math.min(1, -offset / 120)), borderColor: "#b0603f", color: "#b0603f" }}
+            className="decision-badge decision-pass"
+            style={{ opacity: offset < 0 ? decisionOpacity : 0 }}
           >
-            Pass
+            <X className="h-4 w-4" /> Pass
           </div>
         </article>
       </div>
 
-      <div className="mt-7 flex items-center justify-center gap-6">
-        <button
+      <div className="mt-6 flex items-center justify-center gap-6">
+        <Button
           onClick={() => commit(false)}
           aria-label="Not for me"
-          className="flex h-14 w-14 items-center justify-center rounded-full border border-border bg-secondary text-foreground transition hover:bg-secondary/70"
+          variant="secondary"
+          size="icon"
+          className="h-14 w-14 rounded-full border border-border shadow-lg"
         >
           <X className="h-6 w-6" />
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => commit(true)}
           aria-label="Keep this one"
-          className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition hover:brightness-110"
+          size="icon"
+          className="h-16 w-16 rounded-full shadow-xl"
         >
           <Heart className="h-7 w-7" />
-        </button>
+        </Button>
       </div>
-      <p className="mt-4 text-center text-xs text-muted-foreground">
-        Swipe, or use the arrow keys.
-      </p>
+      <p className="sr-only" aria-live="polite">Book {index + 1} of {deck.length}</p>
     </div>
   );
 }
