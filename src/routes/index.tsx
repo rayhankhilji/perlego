@@ -122,6 +122,10 @@ function Onboarding() {
 
   const v = buildVals(s, actions);
 
+  const setIdx = useCallback((i: number) => {
+    setS((p) => (p.idx === i ? p : { ...p, idx: i }));
+  }, []);
+
   const toggleBook = useCallback((g: string) => {
     setS((p) => ({
       ...p,
@@ -140,7 +144,7 @@ function Onboarding() {
           books={FEED}
           liked={s.liked}
           onToggle={toggleBook}
-          onIndex={(i) => setS((p) => ({ ...p, idx: i }))}
+          onIndex={setIdx}
           onDone={() => setS((p) => ({ ...p, screen: "signup" }))}
         />
       )}
