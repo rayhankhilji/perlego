@@ -173,9 +173,6 @@ export function PageFeed({ deck, onDone }: Props) {
             >
               <Heart className={`h-6 w-6 ${book && liked[book.id] ? "fill-current" : ""}`} />
             </button>
-            <span className="text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">
-              {book && liked[book.id] ? "Kept" : "Keep"}
-            </span>
             <button
               type="button"
               onClick={() => move(1)}
