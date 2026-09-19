@@ -48,9 +48,38 @@ export const SCRIPT: PScriptTurn[] = [
   ];
 
 export const PLANS = [
-  { k: 'monthly', name: 'Monthly', perDay: '\u00a30.39', billed: 'Billed \u00a312 per month', note: 'Full access, month to month. Stop whenever you like.', badge: '' },
-  { k: 'termly', name: 'Termly', perDay: '\u00a30.33', billed: 'Billed \u00a340 every 4 months', note: 'Covers one term of reading in a single payment.', badge: '' },
-  { k: 'yearly', name: 'Yearly', perDay: '\u00a30.26', billed: 'Billed \u00a396 every year', note: 'The lowest daily price \u2014 a third less than monthly.', badge: 'Best value' },
+  { k: 'monthly', name: 'Monthly', perDay: '\u00a30.39', perMonth: '\u00a312', billed: 'Billed \u00a312 per month', total: '\u00a312 billed monthly', save: '', note: 'Full access, month to month. Stop whenever you like.', badge: '' },
+  { k: 'termly', name: 'Termly', perDay: '\u00a30.33', perMonth: '\u00a310', billed: 'Billed \u00a340 every 4 months', total: '\u00a340 billed every 4 months', save: 'Save 17%', note: 'Covers one term of reading in a single payment.', badge: '' },
+  { k: 'yearly', name: 'Yearly', perDay: '\u00a30.26', perMonth: '\u00a38', billed: 'Billed \u00a396 every year', total: '\u00a396 billed yearly', save: 'Save 33%', note: 'The lowest monthly price \u2014 a third less than monthly.', badge: 'Best value' },
+];
+
+export const REVIEW_VIDEOS: string[] = [
+  'https://img.perlego.com/landing/testimonials/students-01.mp4',
+  'https://img.perlego.com/landing/testimonials/students-02.mp4',
+  'https://img.perlego.com/landing/testimonials/students-03.mp4',
+];
+
+export type PReview = { text: string; name: string; role: string };
+
+export const REVIEWS: PReview[] = [
+  { text: '\u201cThe range of books on my subject was excellent and also the fact that the latest edition was available was invaluable.\u201d', name: 'Sarienne Kersh', role: 'Student, South Africa' },
+  { text: '\u201cOn my law course, I spent over \u00a3200 on textbooks in the first year\u2026With Perlego I can read as many books as I want and it has proven invaluable during lockdown as I begin my dissertation research. This app has saved my academic career, no joke.\u201d', name: 'Janet Ho', role: 'Student at Hult University' },
+  { text: '\u201cI love Perlego! ... I\u2019m a full time worker and a mum who does her degree course online \u2014 it\u2019s so handy for me to have access to books on and offline at my fingertips. It saves me so much time.\u201d', name: 'Laura', role: 'Student, UK' },
+  { text: '\u201cKeep up the great work, you are providing a service that helps less well-off students stay on equal footing in their studies.\u201d', name: 'Laura', role: 'Student' },
+  { text: '\u201c...when you are on the go, you can continue to read your books and use them for reference. The ability to cite directly into an essay from Perlego is so helpful. I cannot recommend it enough.\u201d', name: 'Ian', role: 'Student, UK' },
+];
+
+export const TRUST_METRICS = [
+  { n: '4.5/5', t: 'rated on Trustpilot' },
+  { n: '1m+', t: 'titles, unlimited' },
+  { n: '7,000', t: 'publishers on the platform' },
+  { n: '1,400+', t: 'institutions reading with us' },
+  { n: '300k+', t: 'students and researchers' },
+];
+
+export const FEATURES = [
+  { title: 'Study guides that map the reading', text: 'Guided paths break a subject into ordered steps, so you always know which chapter comes next.', src: 'https://img.perlego.com/landing/features/paths.mp4', kind: 'video' as const },
+  { title: 'Ask the research assistant', text: 'Ask a question and get an answer grounded in the book you\u2019re reading, with the chapter and page cited.', src: 'https://img.perlego.com/landing/landing-ai-researcher.webm', kind: 'video' as const },
 ];
 
 export const CAT_TINT: Record<string, string> = { 'History & Politics': '#fff2b8', Psychology: '#fbdcff', 'Science & Environment': '#c7f5ea', 'Technology & Society': '#e6ffc9', 'Philosophy & Humanities': '#e4e8fe', 'Business & Economics': '#ffddcc' };
