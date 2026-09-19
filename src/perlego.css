@@ -484,3 +484,31 @@ button{font:inherit;cursor:pointer}
   .pgr-panel.is-open{display:flex;position:absolute;z-index:5;inset:0;width:100%;border-right:none}
   .pgr-info-toggle{display:inline-flex}
 }
+
+/* ---------- review mosaic ---------- */
+.pgw-wall { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; height: 420px; overflow: hidden; }
+.pgw-col { position: relative; overflow: hidden; }
+.pgw-run { display: flex; flex-direction: column; gap: 16px; will-change: transform; animation-timing-function: linear; animation-iteration-count: infinite; }
+.pgw-run--up { animation-name: pgwUp; }
+.pgw-run--down { animation-name: pgwDown; }
+@keyframes pgwUp { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+@keyframes pgwDown { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+.pgw-card { margin: 0; display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: 8px; background: #fff; border: 1px solid #e9e7e3; box-shadow: 0 1px 3px rgba(44,44,44,.06), 0 1px 2px rgba(144,48,7,.04); }
+.pgw-card--video { padding: 0; overflow: hidden; border: none; }
+.pgw-video { display: block; width: 100%; height: 190px; object-fit: cover; border-radius: 8px; background: #efedea; }
+.pgw-quote { margin: 0; font: 400 13.5px/1.6 Inter, sans-serif; color: #2c2c2c; }
+.pgw-cite { display: flex; flex-direction: column; gap: 1px; }
+.pgw-name { font: 600 12.5px Manrope, sans-serif; color: #000; }
+.pgw-role { font: 400 12px Inter, sans-serif; color: #777674; }
+.pgw-fade { position: absolute; left: 0; right: 0; height: 64px; pointer-events: none; }
+.pgw-fade--top { top: 0; background: linear-gradient(180deg, #fff, rgba(255,255,255,0)); }
+.pgw-fade--bottom { bottom: 0; background: linear-gradient(0deg, #fff, rgba(255,255,255,0)); }
+@media (max-width: 860px) { .pgw-wall { grid-template-columns: repeat(2, minmax(0,1fr)); height: 360px; } }
+@media (prefers-reduced-motion: reduce) { .pgw-run { animation: none; } }
+
+/* ---------- plan pill ---------- */
+.pgp-pill { position: relative; display: inline-flex; padding: 4px; border-radius: 999px; background: #f0efec; border: 1px solid #e9e7e3; }
+.pgp-thumb { position: absolute; top: 4px; bottom: 4px; border-radius: 999px; background: #fff; box-shadow: 0 1px 3px rgba(44,44,44,.14), 0 1px 2px rgba(144,48,7,.06); transition: left 200ms cubic-bezier(.4,0,.2,1), width 200ms cubic-bezier(.4,0,.2,1); }
+.pgp-seg { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border: none; background: none; cursor: pointer; border-radius: 999px; font: 600 14px Manrope, sans-serif; color: #666565; transition: color 140ms; }
+.pgp-seg[aria-checked="true"] { color: #3327ec; }
+.pgp-off { padding: 2px 7px; border-radius: 999px; background: #eafbef; color: #007824; font: 600 11px Manrope, sans-serif; }
