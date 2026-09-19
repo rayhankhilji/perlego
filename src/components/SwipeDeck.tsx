@@ -107,7 +107,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
             setDrag(0);
           }}
           style={bookStyle}
-          className="book absolute inset-0 touch-none cursor-grab text-card-foreground active:cursor-grabbing"
+          className="book absolute inset-0 touch-none cursor-grab select-none text-card-foreground active:cursor-grabbing"
         >
           <div className="book-pages" aria-hidden="true" />
           <div className="book-cover-edge" aria-hidden="true" />
