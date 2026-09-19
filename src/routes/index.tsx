@@ -8,7 +8,7 @@ import { PerlegoShell } from "@/components/perlego/PerlegoShell";
 import { BookReader } from "@/components/perlego/BookReader";
 import { Welcome } from "@/components/perlego/screens/Welcome";
 import { Interests } from "@/components/perlego/screens/Interests";
-import { Talk } from "@/components/perlego/screens/Talk";
+import { VoiceTalk } from "@/components/perlego/VoiceTalk";
 import { Load1 } from "@/components/perlego/screens/Load1";
 import { Load2 } from "@/components/perlego/screens/Load2";
 import { Signup } from "@/components/perlego/screens/Signup";
@@ -109,6 +109,15 @@ function Onboarding() {
           return { ...p, said, turn: Math.min(next, SCRIPT.length - 1), talkDone: next >= SCRIPT.length };
         }),
       choosePlan: (plan: string) => setS((p) => ({ ...p, plan })),
+      setVoiceInterests: (keys: string[]) =>
+        setS((p) => {
+          if (!keys.length) return p;
+          const sel: Record<string, boolean> = {};
+          keys.forEach((k) => {
+            sel[k] = true;
+          });
+          return { ...p, sel, talkDone: true };
+        }),
       restart: () => {
         try {
           window.localStorage.removeItem(STORAGE_KEY);
@@ -138,7 +147,12 @@ function Onboarding() {
     <PerlegoShell v={v}>
       {v.isWelcome && <Welcome v={v} />}
       {v.isInterests && <Interests v={v} />}
-      {v.isTalk && <Talk v={v} />}
+      {v.isTalk && (
+        <VoiceTalk
+          onInterests={(keys) => actions.setVoiceInterests(keys)}
+          onContinue={() => setS((p) => ({ ...p, screen: "load1" }))}
+        />
+      )}
       {v.isLoad1 && <Load1 v={v} />}
       {v.isSwipe && (
         <BookReader
