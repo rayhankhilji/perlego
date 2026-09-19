@@ -34,12 +34,15 @@ export function PerlegoPageFeed({ books, liked, onToggle, onIndex, onDone }: Pro
         last.current = now;
         setDir(step);
         setMoved(true);
-        onIndex(next);
         return next;
       });
     },
-    [total, onIndex],
+    [total],
   );
+
+  useEffect(() => {
+    onIndex(index);
+  }, [index, onIndex]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
