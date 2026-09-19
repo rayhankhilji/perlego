@@ -512,3 +512,7 @@ button{font:inherit;cursor:pointer}
 .pgp-seg { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border: none; background: none; cursor: pointer; border-radius: 999px; font: 600 14px Manrope, sans-serif; color: #666565; transition: color 140ms; }
 .pgp-seg[aria-checked="true"] { color: #3327ec; }
 .pgp-off { padding: 2px 7px; border-radius: 999px; background: #eafbef; color: #007824; font: 600 11px Manrope, sans-serif; }
+
+/* ---------- voice orb ---------- */
+.pgv-orb { transition: box-shadow 160ms ease; }
+.pgv-orb--on { box-shadow: 0 0 0 4px rgba(51,39,236,.16), 0 0 0 9px rgba(51,39,236,.07); }
