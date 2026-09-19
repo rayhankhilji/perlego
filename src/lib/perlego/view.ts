@@ -22,8 +22,9 @@ export const SCREEN_ORDER = [
   "swipe",
   "signup",
   "load2",
-  "library",
   "paywall",
+  "checkout",
+  "unlocked",
 ] as const;
 
 export type Screen = (typeof SCREEN_ORDER)[number];
@@ -36,8 +37,9 @@ export const SCREEN_LABELS: Record<Screen, string> = {
   swipe: "Swipe",
   signup: "Sign up",
   load2: "Building",
-  library: "Library",
   paywall: "Plan",
+  checkout: "Payment",
+  unlocked: "Ready",
 };
 
 export type PerlegoState = {
@@ -365,8 +367,9 @@ export function buildVals(state: PerlegoState, actions: PerlegoActions) {
     isSwipe: S === "swipe",
     isSignup: S === "signup",
     isLoad2: S === "load2",
-    isLibrary: S === "library",
     isPaywall: S === "paywall",
+    isCheckout: S === "checkout",
+    isUnlocked: S === "unlocked",
 
     stepLabel: SCREEN_LABELS[S],
     stepCount: `${SCREEN_ORDER.indexOf(S) + 1} / ${SCREEN_ORDER.length}`,
@@ -396,6 +399,9 @@ export function buildVals(state: PerlegoState, actions: PerlegoActions) {
     toSignup: () => actions.go("signup"),
     toLoad2: () => actions.go("load2"),
     toPaywall: () => actions.go("paywall"),
+    toCheckout: () => actions.go("checkout"),
+    toUnlocked: () => actions.go("unlocked"),
+    toReader: () => actions.go("swipe"),
     restart: actions.restart,
 
     mosaic: [0, 1, 2].map((ci) => {

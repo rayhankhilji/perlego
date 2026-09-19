@@ -43,18 +43,11 @@ export function Paywall({ v }: { v: Vals }) {
   const chosen = v.plans.filter((p) => p.cta === "Selected")[0] ?? v.plans[2]!;
 
   return (
-    <section
-      style={sx(
-        "flex:1;display:flex;flex-direction:column;overflow:auto;animation:pgIn .32s cubic-bezier(.4,0,.2,1) both",
-      )}
-    >
-      <div
-        style={sx(
-          "padding:48px 52px 34px;display:flex;flex-direction:column;gap:16px;background:linear-gradient(180deg,#e4e8fe 0%,#ffffff 100%)",
-        )}
-      >
+    <section className="pg-plan">
+      <div className="pg-plan-main">
+      <div className="pg-plan-copy">
         <span style={sx("font:500 12px Manrope,sans-serif;letter-spacing:.6px;text-transform:uppercase;color:#777674")}>
-          Start your 7 days free
+          Your personalised access
         </span>
         <h1
           style={sx(
@@ -67,7 +60,7 @@ export function Paywall({ v }: { v: Vals }) {
 
         <PlanPill v={v} />
 
-        <div style={sx("display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:2px")}>
+        <div className="pg-plan-price">
           <span
             style={sx(
               "font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:46px;line-height:1;color:#000",
@@ -89,6 +82,11 @@ export function Paywall({ v }: { v: Vals }) {
           ) : null}
         </div>
 
+        <div className="pg-plan-action">
+          <PgButton autoWidth large onClick={v.toCheckout}>Continue to payment</PgButton>
+          <span>{chosen.name} · {chosen.total}<br />Cancel anytime</span>
+        </div>
+
         <div style={sx("display:flex;align-items:center;gap:10px;flex-wrap:wrap")}>
           <Stars value={4.5} />
           <span style={sx("font:400 13px Inter,sans-serif;color:#666565")}>Rated 4.5 on Trustpilot</span>
@@ -99,12 +97,7 @@ export function Paywall({ v }: { v: Vals }) {
           </span>
         </div>
       </div>
-
-      <div
-        style={sx(
-          "padding:22px 52px;display:flex;gap:34px;flex-wrap:wrap;border-top:1px solid #e9e7e3;border-bottom:1px solid #e9e7e3;background:#f9f8f6",
-        )}
-      >
+      <div className="pg-plan-trust">
         {TRUST_METRICS.map((m) => (
           <div key={m.t} style={sx("display:flex;flex-direction:column")}>
             <span style={sx("font:700 19px Manrope,sans-serif;color:#000")}>{m.n}</span>
@@ -112,8 +105,12 @@ export function Paywall({ v }: { v: Vals }) {
           </div>
         ))}
       </div>
+      <div className="pg-plan-partners">
+        {v.partners.slice(0, 3).map((p) => <span key={p.name}>{p.name}</span>)}
+      </div>
+      </div>
 
-      <div style={sx("padding:36px 52px 8px;display:flex;flex-direction:column;gap:18px")}>
+      <aside className="pg-plan-reviews">
         <div style={sx("display:flex;flex-direction:column;gap:4px")}>
           <h2
             style={sx(
@@ -123,32 +120,11 @@ export function Paywall({ v }: { v: Vals }) {
             Students on Perlego
           </h2>
           <span style={sx("font:400 13.5px Inter,sans-serif;color:#777674")}>
-            From reviews left by readers on courses like yours.
+            Real stories from curious readers.
           </span>
         </div>
         <ReviewWall />
-      </div>
-
-      <div style={sx("padding:14px 52px 0;display:flex;gap:22px;flex-wrap:wrap;align-items:center")}>
-        {v.partners.map((p) => (
-          <span key={p.name} style={sx("font:500 12.5px Inter,sans-serif;color:#b2b1ae")}>
-            {p.name}
-          </span>
-        ))}
-      </div>
-
-      <div
-        style={sx(
-          "margin-top:28px;padding:24px 52px 40px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-top:1px solid #e9e7e3;background:#fff",
-        )}
-      >
-        <PgButton autoWidth large onClick={v.restart}>
-          Start my free week
-        </PgButton>
-        <span style={sx("font:400 13.5px Inter,sans-serif;color:#777674")}>
-          {chosen.name} · {chosen.total} · cancel anytime
-        </span>
-      </div>
+      </aside>
     </section>
   );
 }
