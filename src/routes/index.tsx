@@ -13,8 +13,9 @@ import { VoiceTalk } from "@/components/perlego/VoiceTalk";
 import { Load1 } from "@/components/perlego/screens/Load1";
 import { Load2 } from "@/components/perlego/screens/Load2";
 import { Signup } from "@/components/perlego/screens/Signup";
-import { Library } from "@/components/perlego/screens/Library";
 import { Paywall } from "@/components/perlego/screens/Paywall";
+import { Checkout } from "@/components/perlego/screens/Checkout";
+import { Unlocked } from "@/components/perlego/screens/Unlocked";
 
 const STORAGE_KEY = "perlego-onboarding-v1";
 
@@ -109,7 +110,7 @@ function Onboarding() {
     return () => timers.forEach(clearTimeout);
   }, [s.screen]);
 
-  // load2: tick the build steps, then the library.
+  // load2: tick the preparation steps, then show the plan.
   useEffect(() => {
     if (s.screen !== "load2") return;
     setS((p) => ({ ...p, build: 0 }));
@@ -117,7 +118,7 @@ function Onboarding() {
     [1, 2, 3].forEach((i) => {
       timers.push(setTimeout(() => setS((p) => (p.screen === "load2" ? { ...p, build: i } : p)), i * 850));
     });
-    timers.push(setTimeout(() => setS((p) => (p.screen === "load2" ? { ...p, screen: "library" } : p)), 4000));
+    timers.push(setTimeout(() => setS((p) => (p.screen === "load2" ? { ...p, screen: "paywall" } : p)), 4000));
     return () => timers.forEach(clearTimeout);
   }, [s.screen]);
 
@@ -197,8 +198,9 @@ function Onboarding() {
       )}
       {v.isSignup && <Signup v={v} />}
       {v.isLoad2 && <Load2 v={v} />}
-      {v.isLibrary && <Library v={v} />}
       {v.isPaywall && <Paywall v={v} />}
+      {v.isCheckout && <Checkout v={v} />}
+      {v.isUnlocked && <Unlocked v={v} />}
     </PerlegoShell>
   );
 }
