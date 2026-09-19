@@ -14,9 +14,20 @@ type Props = {
 
 const EASE = "cubic-bezier(.22,.78,.14,1)";
 
-/** Book cover with a typographic fallback when the publisher image is missing. */
+/** Publisher cover, with a typographic fallback if the remote image is unavailable. */
 function Cover({ book }: { book: RBook }) {
   const st = STYLES[book.style % STYLES.length]!;
+  const [failed, setFailed] = useState(false);
+  if (!failed && book.cover) {
+    return (
+      <img
+        src={book.cover}
+        alt={`${book.title} cover`}
+        onError={() => setFailed(true)}
+        style={sx("width:118px;height:172px;object-fit:cover;border-radius:3px;box-shadow:0 2px 10px rgba(44,44,44,.18)")}
+      />
+    );
+  }
   return (
     <div
       style={{
@@ -189,10 +200,8 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
               ))}
             </div>
             <dl style={sx("margin:4px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font:400 12.5px Inter,sans-serif;color:#565451")}>
-              <dt style={sx("color:#8d887e")}>Published</dt>
-              <dd style={sx("margin:0")}>{book.year}</dd>
-              <dt style={sx("color:#8d887e")}>Pages</dt>
-              <dd style={sx("margin:0")}>{book.pages}</dd>
+               {book.year && <><dt style={sx("color:#8d887e")}>Published</dt><dd style={sx("margin:0")}>{book.year}</dd></>}
+               {book.pages > 0 && <><dt style={sx("color:#8d887e")}>Pages</dt><dd style={sx("margin:0")}>{book.pages}</dd></>}
               <dt style={sx("color:#8d887e")}>Language</dt>
               <dd style={sx("margin:0")}>{book.language}</dd>
               <dt style={sx("color:#8d887e")}>Reference</dt>
