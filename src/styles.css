@@ -491,7 +491,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .book-page-cue::after { animation: none; }
   .feed-hint { animation: none; }
-  .feed-scroller { scroll-behavior: auto; }
+  .feed-turn { animation-duration: 1ms; }
   .book-turning-page { transition-duration: 1ms !important; }
 }
 
