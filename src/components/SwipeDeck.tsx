@@ -31,11 +31,15 @@ export function SwipeDeck({ deck, onDone }: Props) {
       setExit(liked ? "right" : "left");
       if ("vibrate" in navigator) navigator.vibrate(18);
       window.setTimeout(() => {
+        setResetting(true);
         setExit(null);
         setDrag(0);
         if (index + 1 >= deck.length) onDone(verdicts.current);
         else setIndex(index + 1);
-      }, 360);
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => setResetting(false)),
+        );
+      }, 430);
     },
     [deck, index, exit, onDone],
   );
@@ -90,6 +94,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
           aria-label={`Sample page from ${book.title} by ${book.author}. Swipe right to keep or left to pass.`}
           onPointerDown={(event) => {
             startX.current = event.clientX;
+            setDragging(true);
             setHasInteracted(true);
             event.currentTarget.setPointerCapture(event.pointerId);
           }}
@@ -101,11 +106,13 @@ export function SwipeDeck({ deck, onDone }: Props) {
             if (startX.current === null) return;
             const delta = drag;
             startX.current = null;
+            setDragging(false);
             if (Math.abs(delta) > 110) commit(delta > 0);
             else setDrag(0);
           }}
           onPointerCancel={() => {
             startX.current = null;
+            setDragging(false);
             setDrag(0);
           }}
           style={bookStyle}
@@ -138,7 +145,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
             </section>
 
             <div
-              className={`book-turning-page ${turningRight ? "turn-from-right" : "turn-from-left"} ${!hasInteracted && index === 0 ? "book-page-cue" : ""}`}
+              className={`book-turning-page ${turningRight ? "turn-from-right" : "turn-from-left"} ${!dragging && !resetting ? "book-turning-page--animated" : ""} ${!hasInteracted && index === 0 ? "book-page-cue" : ""}`}
               aria-hidden="true"
             >
               <div className="book-turning-page-front">
