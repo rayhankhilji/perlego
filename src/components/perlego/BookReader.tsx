@@ -93,7 +93,7 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
   const lastT = useRef(0);
   const velocity = useRef(0);
   const wheelOffset = useRef(0);
-  const wheelTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const wheelTimer = useRef<number | null>(null);
   const frame = useRef<number | null>(null);
   const stage = useRef<HTMLDivElement | null>(null);
   const [h, setH] = useState(0);
