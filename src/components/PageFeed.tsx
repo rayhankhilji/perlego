@@ -114,8 +114,9 @@ export function PageFeed({ deck, onDone }: Props) {
         ))}
       </div>
 
-      <article className="feed-page min-h-0">
-        {book ? (
+      <div className="flex min-h-0 w-full flex-1 items-center justify-center">
+        <article className="feed-page">
+          {book ? (
           <div key={book.id} className={`feed-turn ${dir === 1 ? "feed-turn--down" : "feed-turn--up"}`}>
             <div className="book-kicker">
               <span>{TRACK_LABELS[book.track]}</span>
