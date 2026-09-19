@@ -79,7 +79,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
         ))}
       </div>
 
-      <div className="book-stage relative mx-auto w-full max-w-5xl flex-1">
+      <div className="book-stage relative mx-auto w-full max-w-5xl">
         {deck[index + 1] && (
           <div className="book-shadow absolute inset-x-5 inset-y-3 rounded-sm" aria-hidden="true" />
         )}
