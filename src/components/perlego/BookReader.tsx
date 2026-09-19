@@ -14,6 +14,46 @@ type Props = {
 
 const EASE = "cubic-bezier(.22,.78,.14,1)";
 
+/** Book cover with a typographic fallback when the publisher image is missing. */
+function Cover({ book }: { book: RBook }) {
+  const [failed, setFailed] = useState(false);
+  const st = STYLES[book.style % STYLES.length]!;
+  useEffect(() => setFailed(false), [book.gid]);
+
+  if (failed) {
+    return (
+      <div
+        style={{
+          ...sx(
+            "width:118px;height:170px;border-radius:3px;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:14px;box-shadow:0 2px 10px rgba(44,44,44,.18)",
+          ),
+          background: st.bg,
+          color: st.ink,
+          fontFamily: st.font,
+        }}
+      >
+        <span style={{ fontSize: 13, lineHeight: 1.25, fontWeight: 600 }}>{book.title}</span>
+        <span style={{ fontSize: 10.5, color: st.accent }}>{book.author}</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      key={book.gid}
+      src={book.cover}
+      alt={`Cover of ${book.title}`}
+      onError={() => setFailed(true)}
+      onLoad={(e) => {
+        if (e.currentTarget.naturalWidth < 30) setFailed(true);
+      }}
+      style={sx(
+        "width:118px;height:auto;border-radius:3px;background:#e9e7e3;box-shadow:0 2px 10px rgba(44,44,44,.18)",
+      )}
+    />
+  );
+}
+
 /** Shrinks the type a little until the whole page fits without clipping. */
 function FitBox({ children }: { children: ReactNode }) {
   const box = useRef<HTMLDivElement | null>(null);
