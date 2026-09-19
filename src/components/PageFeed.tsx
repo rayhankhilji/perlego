@@ -173,6 +173,14 @@ export function PageFeed({ deck, onDone }: Props) {
           <span className="text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">
             {book && liked[book.id] ? "Kept" : "Keep"}
           </span>
+          <button
+            type="button"
+            onClick={() => move(1)}
+            aria-label="Next page"
+            className="feed-like"
+          >
+            <ArrowDown className="h-6 w-6" />
+          </button>
         </div>
       )}
 

@@ -465,8 +465,7 @@ body {
 }
 
 @media (max-width: 520px) {
-  .feed-page { padding: 1.15rem; border-radius: 0.2rem 0.4rem 0.4rem 0.2rem; }
-  .feed-actions { bottom: 4.2rem; right: 0.9rem; }
+  .feed-page { padding: 1.15rem; }
   .book-stage { width: 100%; aspect-ratio: 4 / 5; }
   .book-verso, .book-recto { padding: 1.1rem; }
   .book-leaf-content { padding: 1.1rem; }
