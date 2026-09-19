@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import "@/perlego.css";
 import { CAPTIONS, SCRIPT } from "@/lib/perlego/data";
 import { LIBRARY } from "@/lib/perlego/library";
+import { COVER_BOOKS } from "@/lib/perlego/coverBooks";
 import { buildVals, INITIAL_STATE, type PerlegoState, type Screen } from "@/lib/perlego/view";
 import { PerlegoShell } from "@/components/perlego/PerlegoShell";
 import { BookReader } from "@/components/perlego/BookReader";
@@ -39,7 +40,30 @@ export const Route = createFileRoute("/")({
   component: Onboarding,
 });
 
-const FEED = LIBRARY;
+const FEED = [...COVER_BOOKS, ...LIBRARY];
+
+const TOPIC_TERMS: Record<string, string[]> = {
+  science: ["science", "evolution", "cosmology", "biology", "research"],
+  fiction: ["fiction", "literature", "story"],
+  nonfiction: ["history", "psychology", "science", "business", "philosophy"],
+  business: ["business", "startup", "entrepreneurship", "strategy", "work", "wealth"],
+  history: ["history", "civilization", "societies", "war", "humanity"],
+  philosophy: ["philosophy", "ethics", "meaning", "stoicism", "morality"],
+  psychology: ["psychology", "behavior", "behaviour", "cognition", "habits", "dreams"],
+  economics: ["economics", "money", "wealth", "markets", "investing"],
+  politics: ["politics", "power", "society", "institutions", "strategy"],
+  technology: ["technology", "systems", "innovation", "startups"],
+  art: ["art", "design", "creative", "culture"],
+  environment: ["environment", "ecology", "nature", "climate", "systems"],
+};
+
+function relevance(book: (typeof FEED)[number], selected: string[]): number {
+  const haystack = [book.category, ...book.subtopics, ...book.tags].join(" ").toLowerCase();
+  return selected.reduce(
+    (score, topic) => score + (TOPIC_TERMS[topic]?.filter((term) => haystack.includes(term)).length ?? 0),
+    0,
+  );
+}
 
 function Onboarding() {
   const [s, setS] = useState<PerlegoState>(INITIAL_STATE);
@@ -131,6 +155,14 @@ function Onboarding() {
   );
 
   const v = buildVals(s, actions);
+  const selectedTopics = Object.keys(s.sel).filter((key) => s.sel[key]);
+  const personalisedFeed = useMemo(
+    () =>
+      FEED.map((book, order) => ({ book, order, score: relevance(book, selectedTopics) }))
+        .sort((a, b) => b.score - a.score || a.order - b.order)
+        .map(({ book }) => book),
+    [selectedTopics.join("|")],
+  );
 
   const setIdx = useCallback((i: number) => {
     setS((p) => (p.idx === i ? p : { ...p, idx: i }));
@@ -156,7 +188,7 @@ function Onboarding() {
       {v.isLoad1 && <Load1 v={v} />}
       {v.isSwipe && (
         <BookReader
-          books={FEED}
+          books={personalisedFeed}
           liked={s.liked}
           onToggle={toggleBook}
           onIndex={setIdx}
