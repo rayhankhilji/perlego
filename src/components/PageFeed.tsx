@@ -163,26 +163,28 @@ export function PageFeed({ deck, onDone }: Props) {
 
       {!atEnd && (
         <div className="feed-actions">
-          <button
-            type="button"
-            onClick={() => book && toggle(book.id)}
-            aria-pressed={book ? Boolean(liked[book.id]) : false}
-            aria-label={book && liked[book.id] ? `Remove ${book.title} from your shelf` : "Keep this page"}
-            className={`feed-like ${book && liked[book.id] ? "feed-like--on" : ""}`}
-          >
-            <Heart className={`h-6 w-6 ${book && liked[book.id] ? "fill-current" : ""}`} />
-          </button>
-          <span className="text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">
-            {book && liked[book.id] ? "Kept" : "Keep"}
-          </span>
-          <button
-            type="button"
-            onClick={() => move(1)}
-            aria-label="Next page"
-            className="feed-like"
-          >
-            <ArrowDown className="h-6 w-6" />
-          </button>
+          <div className="flex flex-nowrap items-center justify-center gap-3 whitespace-nowrap">
+            <button
+              type="button"
+              onClick={() => book && toggle(book.id)}
+              aria-pressed={book ? Boolean(liked[book.id]) : false}
+              aria-label={book && liked[book.id] ? `Remove ${book.title} from your shelf` : "Keep this page"}
+              className={`feed-like ${book && liked[book.id] ? "feed-like--on" : ""}`}
+            >
+              <Heart className={`h-6 w-6 ${book && liked[book.id] ? "fill-current" : ""}`} />
+            </button>
+            <span className="text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">
+              {book && liked[book.id] ? "Kept" : "Keep"}
+            </span>
+            <button
+              type="button"
+              onClick={() => move(1)}
+              aria-label="Next page"
+              className="feed-like"
+            >
+              <ArrowDown className="h-6 w-6" />
+            </button>
+          </div>
         </div>
       )}
 
