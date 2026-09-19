@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useCallback, useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { VoiceStage } from "@/components/VoiceStage";
-import { SwipeDeck } from "@/components/SwipeDeck";
+import { PageFeed } from "@/components/PageFeed";
 import { LibraryStage } from "@/components/LibraryStage";
 import { Paywall } from "@/components/Paywall";
 import type { Book } from "@/lib/books";
@@ -117,7 +117,7 @@ function Onboarding() {
       {stage === "voice-intro" && <VoiceStage phase="intro" onInterests={handleInterests} />}
 
       {stage === "swipe" && deck.length > 0 && (
-        <SwipeDeck deck={deck} onDone={(result) => void handleSwipesDone(result)} />
+        <PageFeed deck={deck} onDone={(result) => void handleSwipesDone(result)} />
       )}
 
       {stage === "curating" && (
