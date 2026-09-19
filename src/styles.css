@@ -206,6 +206,10 @@ body {
   background: linear-gradient(90deg, var(--book-paper-deep) 0%, var(--book-paper) 12%, var(--book-paper) 100%);
 }
 
+.book-page-text-hidden > * {
+  opacity: 0;
+}
+
 .book-kicker,
 .book-running-head {
   display: flex;
