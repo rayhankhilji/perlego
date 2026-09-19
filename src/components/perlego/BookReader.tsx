@@ -12,7 +12,7 @@ type Props = {
   onDone: () => void;
 };
 
-const EASE = "cubic-bezier(.22,.78,.14,1)";
+const EASE = "cubic-bezier(.16,1,.3,1)";
 
 /** Publisher cover, with a typographic fallback if the remote image is unavailable. */
 function Cover({ book }: { book: RBook }) {
@@ -76,7 +76,7 @@ function FitBox({ children }: { children: ReactNode }) {
     </div>
   );
 }
-const DUR = 720;
+const DUR = 860;
 
 /** One full page per book, with a side panel of book details. */
 export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
@@ -89,6 +89,12 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
   const idxRef = useRef(0);
   const lockRef = useRef(0);
   const startY = useRef<number | null>(null);
+  const lastY = useRef(0);
+  const lastT = useRef(0);
+  const velocity = useRef(0);
+  const wheelOffset = useRef(0);
+  const wheelTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const frame = useRef<number | null>(null);
   const stage = useRef<HTMLDivElement | null>(null);
   const [h, setH] = useState(0);
 
@@ -110,7 +116,7 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
       if (now < lockRef.current) return;
       const next = idxRef.current + step;
       if (next < 0 || next > slides - 1) return;
-      lockRef.current = now + DUR * 0.62;
+      lockRef.current = now + DUR * 0.42;
       idxRef.current = next;
       setAnimating(true);
       setDrag(0);
@@ -141,26 +147,26 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
   }, [book, move, onToggle]);
 
   useEffect(() => {
-    let acc = 0;
-    let decay = 0;
     const onWheel = (e: WheelEvent) => {
-      window.clearTimeout(decay);
-      acc += e.deltaY;
-      // weighted: needs a deliberate push, not a flick
-      if (Math.abs(acc) > 90) {
-        move(acc > 0 ? 1 : -1);
-        acc = 0;
-      }
-      decay = window.setTimeout(() => {
-        acc = 0;
-      }, 220);
+      e.preventDefault();
+      wheelOffset.current = Math.max(-h * 0.3, Math.min(h * 0.3, wheelOffset.current - e.deltaY * 0.7));
+      if (frame.current !== null) cancelAnimationFrame(frame.current);
+      frame.current = requestAnimationFrame(() => setDrag(wheelOffset.current));
+      if (wheelTimer.current) window.clearTimeout(wheelTimer.current);
+      wheelTimer.current = window.setTimeout(() => {
+        const amount = wheelOffset.current;
+        wheelOffset.current = 0;
+        setDrag(0);
+        if (Math.abs(amount) > 38) move(amount < 0 ? 1 : -1);
+      }, 110);
     };
-    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("wheel", onWheel, { passive: false });
     return () => {
       window.removeEventListener("wheel", onWheel);
-      window.clearTimeout(decay);
+      if (wheelTimer.current) window.clearTimeout(wheelTimer.current);
+      if (frame.current !== null) cancelAnimationFrame(frame.current);
     };
-  }, [move]);
+  }, [h, move]);
 
   const offset = -index * h + drag;
 
@@ -238,19 +244,31 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
         ref={stage}
         onPointerDown={(e) => {
           if (e.pointerType === "mouse" && e.button !== 0) return;
+          e.currentTarget.setPointerCapture(e.pointerId);
           startY.current = e.clientY;
+          lastY.current = e.clientY;
+          lastT.current = performance.now();
+          velocity.current = 0;
         }}
         onPointerMove={(e) => {
           if (startY.current === null) return;
           const d = e.clientY - startY.current;
-          setDrag(d * 0.32); // weighted follow
+          const now = performance.now();
+          const elapsed = Math.max(1, now - lastT.current);
+          velocity.current = velocity.current * 0.7 + ((e.clientY - lastY.current) / elapsed) * 0.3;
+          lastY.current = e.clientY;
+          lastT.current = now;
+          const resisted = d / (1 + Math.abs(d) / Math.max(300, h * 0.7));
+          if (frame.current !== null) cancelAnimationFrame(frame.current);
+          frame.current = requestAnimationFrame(() => setDrag(resisted * 0.82));
         }}
         onPointerUp={(e) => {
           if (startY.current === null) return;
           const d = e.clientY - startY.current;
+          const projected = d + velocity.current * 150;
           startY.current = null;
           setDrag(0);
-          if (Math.abs(d) > 56) move(d < 0 ? 1 : -1);
+          if (Math.abs(projected) > 52) move(projected < 0 ? 1 : -1);
         }}
         onPointerCancel={() => {
           startY.current = null;
