@@ -1,6 +1,7 @@
 import { sx } from "@/lib/perlego/sx";
 import type { Vals } from "@/lib/perlego/view";
 import { PgButton } from "@/components/perlego/PgButton";
+import { FEATURES } from "@/lib/perlego/data";
 
 export function Library({ v }: { v: Vals }) {
   return (
@@ -47,20 +48,6 @@ export function Library({ v }: { v: Vals }) {
         >
           {v.insight}
         </div>
-        <div style={sx("display:flex;flex-direction:column;gap:9px;max-width:460px")}>
-          <span style={sx("font:600 13px Manrope,sans-serif;color:#383838")}>Your mix</span>
-          {v.mix.map((m) => (
-            <div key={m.name} style={sx("display:flex;align-items:center;gap:12px")}>
-              <span style={sx("flex:none;width:150px;font:400 13px Inter,sans-serif;color:#4e4e4e")}>{m.name}</span>
-              <span style={sx("flex:1;height:6px;border-radius:999px;background:#e9e7e3;overflow:hidden")}>
-                <span style={m.barStyle} />
-              </span>
-              <span style={sx("flex:none;font:500 12.5px Inter,sans-serif;color:#777674;width:38px;text-align:right")}>
-                {m.pct}
-              </span>
-            </div>
-          ))}
-        </div>
       </div>
 
       <div style={sx("padding:32px 52px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px")}>
@@ -100,31 +87,44 @@ export function Library({ v }: { v: Vals }) {
         ))}
       </div>
 
-      <div style={sx("padding:32px 52px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px")}>
-        {v.valueCards.map((c) => (
-          <div
-            key={c.title}
+      <div style={sx("padding:40px 52px 0;display:flex;flex-direction:column;gap:16px")}>
+        <div style={sx("display:flex;flex-direction:column;gap:4px")}>
+          <h2
             style={sx(
-              "display:flex;flex-direction:column;gap:9px;padding:20px;border-radius:12px;background:#f9f8f6;border:1px solid #e9e7e3",
+              "font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:26px;margin:0;color:#000;letter-spacing:-.4px",
             )}
           >
-            <span style={c.iconStyle} />
-            <span style={sx("font:600 15px Manrope,sans-serif;color:#000")}>{c.title}</span>
-            <span style={sx("font:400 13.5px/1.6 Inter,sans-serif;color:#666565")}>{c.text}</span>
-          </div>
-        ))}
-      </div>
-
-      {v.skipped.length > 0 && (
-        <div style={sx("padding:32px 52px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap")}>
-          <span style={sx("font:400 13px Inter,sans-serif;color:#777674")}>Left out, based on your passes</span>
-          <span style={sx("display:flex;gap:7px")}>
-            {v.skipped.map((s, i) => (
-              <span key={i} style={s.coverStyle} />
-            ))}
+            What you can do with these books
+          </h2>
+          <span style={sx("font:400 13.5px Inter,sans-serif;color:#777674")}>
+            Every title opens in the reader, with study guides and the research assistant alongside.
           </span>
         </div>
-      )}
+        <div style={sx("display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px")}>
+          {FEATURES.map((f) => (
+            <div
+              key={f.title}
+              style={sx(
+                "display:flex;flex-direction:column;border-radius:12px;border:1px solid #e9e7e3;background:#fff;overflow:hidden;box-shadow:0 1px 3px rgba(44,44,44,.06)",
+              )}
+            >
+              <video
+                src={f.src}
+                muted
+                autoPlay
+                loop
+                playsInline
+                preload="metadata"
+                style={sx("display:block;width:100%;height:210px;object-fit:cover;background:#f0efec")}
+              />
+              <div style={sx("display:flex;flex-direction:column;gap:7px;padding:18px 20px 22px")}>
+                <span style={sx("font:600 16px Manrope,sans-serif;color:#000")}>{f.title}</span>
+                <span style={sx("font:400 13.5px/1.6 Inter,sans-serif;color:#666565")}>{f.text}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       <div
         style={sx(
