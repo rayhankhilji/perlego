@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import "@/perlego.css";
-import { BOOKS, CAPTIONS, SCRIPT } from "@/lib/perlego/data";
+import { CAPTIONS, SCRIPT } from "@/lib/perlego/data";
+import { LIBRARY } from "@/lib/perlego/library";
 import { buildVals, INITIAL_STATE, type PerlegoState, type Screen } from "@/lib/perlego/view";
 import { PerlegoShell } from "@/components/perlego/PerlegoShell";
-import { PerlegoPageFeed } from "@/components/perlego/PerlegoPageFeed";
+import { BookReader } from "@/components/perlego/BookReader";
 import { Welcome } from "@/components/perlego/screens/Welcome";
 import { Interests } from "@/components/perlego/screens/Interests";
 import { Talk } from "@/components/perlego/screens/Talk";
@@ -38,7 +39,7 @@ export const Route = createFileRoute("/")({
   component: Onboarding,
 });
 
-const FEED = BOOKS.slice(0, 12);
+const FEED = LIBRARY;
 
 function Onboarding() {
   const [s, setS] = useState<PerlegoState>(INITIAL_STATE);
@@ -140,7 +141,7 @@ function Onboarding() {
       {v.isTalk && <Talk v={v} />}
       {v.isLoad1 && <Load1 v={v} />}
       {v.isSwipe && (
-        <PerlegoPageFeed
+        <BookReader
           books={FEED}
           liked={s.liked}
           onToggle={toggleBook}

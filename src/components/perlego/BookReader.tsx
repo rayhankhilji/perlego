@@ -30,7 +30,6 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
   const [h, setH] = useState(0);
 
   const book = books[index];
-  const style = book ? STYLES[book.style % STYLES.length]! : STYLES[0]!;
   const isLiked = book ? liked.includes(book.gid) : false;
 
   useEffect(() => {
@@ -340,7 +339,7 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
 
       <p className="sr-only" aria-live="polite">
         {book ? `${book.title} by ${book.author}. Page ${index + 1} of ${total}.` : "End of the reading round."}{" "}
-        {liked.length} kept. {style.bg}
+        {liked.length} kept.
       </p>
     </section>
   );
