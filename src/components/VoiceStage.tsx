@@ -136,6 +136,17 @@ function VoiceStageInner(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.phase]);
 
+  useEffect(() => {
+    if (props.phase !== "curated" || status !== "error") return;
+    const timer = window.setTimeout(() => {
+      if (handled.current) return;
+      handled.current = true;
+      props.onShowLibrary();
+    }, 1400);
+    return () => window.clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.phase, status]);
+
   const speaking = conversation.isSpeaking;
   const live = status === "live";
 
@@ -175,9 +186,12 @@ function VoiceStageInner(props: Props) {
       )}
 
       {props.phase === "curated" && (
-        <h1 className="font-display text-3xl leading-tight text-foreground sm:text-4xl">
-          Reading your reactions…
-        </h1>
+        <div className="space-y-3">
+          <h1 className="font-display text-3xl leading-tight text-foreground sm:text-4xl">
+            Reading your reactions…
+          </h1>
+          <p className="text-sm text-muted-foreground">{props.tasteSummary}</p>
+        </div>
       )}
 
       {lines.length > 0 && (
