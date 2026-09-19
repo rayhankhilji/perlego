@@ -16,41 +16,22 @@ const EASE = "cubic-bezier(.22,.78,.14,1)";
 
 /** Book cover with a typographic fallback when the publisher image is missing. */
 function Cover({ book }: { book: RBook }) {
-  const [failed, setFailed] = useState(false);
   const st = STYLES[book.style % STYLES.length]!;
-  useEffect(() => setFailed(false), [book.gid]);
-
-  if (failed) {
-    return (
-      <div
-        style={{
-          ...sx(
-            "width:118px;height:170px;border-radius:3px;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:14px;box-shadow:0 2px 10px rgba(44,44,44,.18)",
-          ),
-          background: st.bg,
-          color: st.ink,
-          fontFamily: st.font,
-        }}
-      >
-        <span style={{ fontSize: 13, lineHeight: 1.25, fontWeight: 600 }}>{book.title}</span>
-        <span style={{ fontSize: 10.5, color: st.accent }}>{book.author}</span>
-      </div>
-    );
-  }
-
   return (
-    <img
-      key={book.gid}
-      src={book.cover}
-      alt={`Cover of ${book.title}`}
-      onError={() => setFailed(true)}
-      onLoad={(e) => {
-        if (e.currentTarget.naturalWidth < 30) setFailed(true);
+    <div
+      style={{
+        ...sx(
+          "width:118px;height:172px;border-radius:3px;display:flex;flex-direction:column;justify-content:space-between;padding:14px 13px;box-shadow:0 2px 10px rgba(44,44,44,.18)",
+        ),
+        background: st.bg,
+        color: st.ink,
+        fontFamily: st.font,
+        borderTop: `3px solid ${st.accent}`,
       }}
-      style={sx(
-        "width:118px;height:auto;border-radius:3px;background:#e9e7e3;box-shadow:0 2px 10px rgba(44,44,44,.18)",
-      )}
-    />
+    >
+      <span style={{ fontSize: 13.5, lineHeight: 1.22, fontWeight: 600 }}>{book.title}</span>
+      <span style={{ fontSize: 10, color: st.accent, letterSpacing: ".4px" }}>{book.author}</span>
+    </div>
   );
 }
 
