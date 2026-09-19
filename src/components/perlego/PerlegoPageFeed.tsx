@@ -19,6 +19,7 @@ export function PerlegoPageFeed({ books, liked, onToggle, onIndex, onDone }: Pro
   const [moved, setMoved] = useState(false);
   const startY = useRef<number | null>(null);
   const last = useRef(0);
+  const idxRef = useRef(0);
 
   const book = books[index];
   const atEnd = index >= total;
@@ -28,14 +29,13 @@ export function PerlegoPageFeed({ books, liked, onToggle, onIndex, onDone }: Pro
     (step: 1 | -1) => {
       const now = Date.now();
       if (now - last.current < 380) return;
-      setIndex((prev) => {
-        const next = prev + step;
-        if (next < 0 || next > total) return prev;
-        last.current = now;
-        setDir(step);
-        setMoved(true);
-        return next;
-      });
+      const next = idxRef.current + step;
+      if (next < 0 || next > total) return;
+      last.current = now;
+      idxRef.current = next;
+      setDir(step);
+      setMoved(true);
+      setIndex(next);
     },
     [total],
   );
