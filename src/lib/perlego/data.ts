@@ -70,7 +70,11 @@ export const REVIEWS: PReview[] = [
 ];
 
 export const TRUST_METRICS = [
-  { n: '4.5/5', t: 'rated on Trustpilog', hide: true },
+  { n: '4.5/5', t: 'rated on Trustpilot' },
+  { n: '1m+', t: 'titles, unlimited' },
+  { n: '7,000', t: 'publishers on the platform' },
+  { n: '1,400+', t: 'institutions reading with us' },
+  { n: '300k+', t: 'students and researchers' },
 ];
 
 export const FEATURES = [
