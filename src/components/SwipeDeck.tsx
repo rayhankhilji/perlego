@@ -62,7 +62,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
   };
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col justify-center px-4 py-6 sm:px-8 sm:py-8">
+    <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center px-4 py-6 sm:px-8 sm:py-8">
       <header className="mb-5 flex items-center justify-between text-xs uppercase tracking-[0.2em] text-muted-foreground">
         <span>One page each</span>
         <span>
@@ -79,7 +79,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
         ))}
       </div>
 
-      <div className="book-stage relative mx-auto w-full max-w-3xl flex-1">
+      <div className="book-stage relative mx-auto w-full max-w-5xl flex-1">
         {deck[index + 1] && (
           <div className="book-shadow absolute inset-x-5 inset-y-3 rounded-sm" aria-hidden="true" />
         )}

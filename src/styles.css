@@ -129,8 +129,8 @@ body {
 }
 
 .book-stage {
-  min-height: clamp(29rem, 68vh, 39rem);
-  perspective: 1600px;
+  min-height: clamp(29rem, 72vh, 43rem);
+  perspective: 1800px;
 }
 
 .book {
