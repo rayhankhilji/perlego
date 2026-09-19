@@ -14,6 +14,8 @@ export function SwipeDeck({ deck, onDone }: Props) {
   const [index, setIndex] = useState(0);
   const [drag, setDrag] = useState(0);
   const [exit, setExit] = useState<"left" | "right" | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const [resetting, setResetting] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const verdicts = useRef<Verdict[]>([]);
   const startX = useRef<number | null>(null);
