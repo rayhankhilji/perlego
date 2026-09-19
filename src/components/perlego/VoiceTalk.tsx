@@ -92,10 +92,19 @@ function VoiceTalkInner({
     setStatus("connecting");
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      const res = await fetch("/api/elevenlabs-token", { method: "POST" });
-      const data = (await res.json()) as { token?: string; error?: string };
-      if (!res.ok || !data.token) throw new Error(data.error ?? "Could not start the conversation");
-      await conversationRef.current.startSession({ conversationToken: data.token, connectionType: "webrtc" });
+      try {
+        const res = await fetch("/api/elevenlabs-token", { method: "POST" });
+        const data = (await res.json()) as { token?: string; error?: string };
+        if (!res.ok || !data.token) throw new Error(data.error ?? "Could not start the conversation");
+        await conversationRef.current.startSession({ conversationToken: data.token, connectionType: "webrtc" });
+      } catch (webrtcError) {
+        // Some networks block the real-time media path — fall back to websocket audio.
+        console.warn("WebRTC voice session failed, falling back to websocket", webrtcError);
+        const res = await fetch("/api/elevenlabs-token?transport=websocket", { method: "POST" });
+        const data = (await res.json()) as { signedUrl?: string; error?: string };
+        if (!res.ok || !data.signedUrl) throw new Error(data.error ?? "Could not start the conversation");
+        await conversationRef.current.startSession({ signedUrl: data.signedUrl, connectionType: "websocket" });
+      }
     } catch (e) {
       setStatus("idle");
       setError(
