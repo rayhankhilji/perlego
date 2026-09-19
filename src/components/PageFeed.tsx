@@ -158,7 +158,8 @@ export function PageFeed({ deck, onDone }: Props) {
             </Button>
           </div>
         )}
-      </article>
+        </article>
+      </div>
 
       {!atEnd && (
         <div className="feed-actions">
