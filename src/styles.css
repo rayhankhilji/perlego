@@ -205,8 +205,6 @@ body {
   background: linear-gradient(90deg, var(--book-paper-deep) 0%, var(--book-paper) 12%, var(--book-paper) 100%);
 }
 
-}
-
 .book-kicker,
 .book-running-head {
   display: flex;
