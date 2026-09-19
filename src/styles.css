@@ -440,7 +440,7 @@ body {
   border-radius: 999px;
   border: 1px solid var(--border);
   background: var(--card);
-  color: var(--foreground);
+  color: var(--card-foreground);
   box-shadow: 0 14px 30px -14px oklch(0 0 0 / 60%);
   transition: transform 180ms ease-out, background-color 180ms ease-out, color 180ms ease-out;
 }
