@@ -199,9 +199,14 @@ body {
   background: linear-gradient(90deg, var(--book-paper) 0%, var(--book-paper) 82%, var(--book-paper-deep) 100%);
 }
 
+.book-verso {
+  border-radius: 0.2rem 0 0 0.2rem;
+}
+
 .book-recto {
   display: flex;
   flex-direction: column;
+  border-radius: 0 0.5rem 0.5rem 0;
   background: linear-gradient(90deg, var(--book-paper-deep) 0%, var(--book-paper) 12%, var(--book-paper) 100%);
 }
 
@@ -298,6 +303,16 @@ body {
 .book-turning-page-back {
   transform: rotateY(180deg) translateZ(1px);
   background: linear-gradient(90deg, var(--book-paper), var(--book-paper-deep));
+}
+
+.turn-from-right .book-turning-page-front,
+.turn-from-right .book-turning-page-back {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.turn-from-left .book-turning-page-front,
+.turn-from-left .book-turning-page-back {
+  border-radius: 0.2rem 0 0 0.2rem;
 }
 
 .book-leaf-content {
