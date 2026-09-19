@@ -64,7 +64,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
   const turningRight = exit ? exit === "right" : drag >= 0;
   const decisionOffset = exit === "right" ? 180 : exit === "left" ? -180 : drag;
   const decisionOpacity = Math.max(0, Math.min(1, Math.abs(decisionOffset) / 120));
-  const pageContentOpacity = Math.max(0, Math.min(1, (84 - Math.abs(turn)) / 18));
+  const pageContentOpacity = dragging || exit ? 0 : 1;
   const bookStyle: CSSProperties & Record<"--book-accent" | "--page-turn" | "--turn-opacity" | "--page-content-opacity", string> = {
     "--book-accent": book.accent,
     "--page-turn": `${turn}deg`,
@@ -126,7 +126,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
           <div className="book-pages" aria-hidden="true" />
           <div className="book-cover-edge" aria-hidden="true" />
           <div className="book-spread">
-            <section className="book-verso">
+            <section className={`book-verso ${dragging || exit ? (!turningRight ? "book-page-text-hidden" : "") : ""}`}>
               <div className="book-kicker">
                 <span>{TRACK_LABELS[book.track]}</span>
                 <span>{book.year}</span>
@@ -143,7 +143,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
               </p>
             </section>
 
-            <section className="book-recto">
+            <section className={`book-recto ${dragging || exit ? (turningRight ? "book-page-text-hidden" : "") : ""}`}>
               <span className="book-running-head">A page to try</span>
               <p className="font-display book-copy">{book.page}</p>
               <span className="book-page-number">{String(index + 17).padStart(2, "0")}</span>
@@ -153,28 +153,7 @@ export function SwipeDeck({ deck, onDone }: Props) {
               className={`book-turning-page ${turningRight ? "turn-from-right" : "turn-from-left"} ${!dragging && !resetting ? "book-turning-page--animated" : ""} ${!hasInteracted && index === 0 ? "book-page-cue" : ""}`}
               aria-hidden="true"
             >
-              <div className="book-turning-page-front">
-                {turningRight ? (
-                  <div className="book-leaf-content book-leaf-excerpt">
-                    <span className="book-running-head">A page to try</span>
-                    <p className="font-display book-copy">{book.page}</p>
-                    <span className="book-page-number">{String(index + 17).padStart(2, "0")}</span>
-                  </div>
-                ) : (
-                  <div className="book-leaf-content book-leaf-title">
-                    <div className="book-kicker">
-                      <span>{TRACK_LABELS[book.track]}</span>
-                      <span>{book.year}</span>
-                    </div>
-                    <div>
-                      <div className="book-rule" />
-                      <p className="font-display mt-4 text-[clamp(1.55rem,4vw,2.7rem)] leading-[0.98]">{book.title}</p>
-                      <p className="mt-3 text-xs opacity-60 sm:text-sm">{book.author}</p>
-                    </div>
-                    <p className="font-display text-base italic leading-snug text-book-accent sm:text-xl">{book.hook}</p>
-                  </div>
-                )}
-              </div>
+              <div className="book-turning-page-front" />
               <div className="book-turning-page-back" />
             </div>
             <div className="book-gutter" aria-hidden="true" />
