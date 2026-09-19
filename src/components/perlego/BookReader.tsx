@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { mask, sx } from "@/lib/perlego/sx";
 import { STYLES, type RBook } from "@/lib/perlego/library";
 import { CAT_TINT } from "@/lib/perlego/data";
@@ -15,7 +15,7 @@ type Props = {
 const EASE = "cubic-bezier(.22,.78,.14,1)";
 
 /** Shrinks the type a little until the whole page fits without clipping. */
-function FitBox({ children }: { children: React.ReactNode }) {
+function FitBox({ children }: { children: ReactNode }) {
   const box = useRef<HTMLDivElement | null>(null);
   const [fit, setFit] = useState(1);
 
@@ -262,13 +262,16 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
                 style={{ top: i * h, height: h || undefined }}
                 aria-hidden={i !== index}
               >
-                <div className="pgr-page" style={{ background: st.bg, color: st.ink, fontFamily: st.font }}>
+                <div
+                  className="pgr-page"
+                  style={{ background: st.bg, color: st.ink, fontFamily: st.font, fontSize: fs(st.size) }}
+                >
                   {b.label && (
                     <p
                       style={{
                         ...sx("margin:0 0 1.1em;text-align:center;letter-spacing:.22em;text-transform:uppercase"),
                         color: st.accent,
-                        fontSize: fs(11.5),
+                        fontSize: "0.63em",
                         fontFamily: st.font,
                       }}
                     >
@@ -281,7 +284,6 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
                         key={pi}
                         className={"pgr-para" + (pi === 0 && st.caps ? " pgr-cap" : "")}
                         style={{
-                          fontSize: fs(st.size),
                           lineHeight: st.leading,
                           textAlign: st.align,
                           hyphens: "auto",
@@ -294,7 +296,7 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
                   <span
                     style={{
                       ...sx("position:absolute;left:0;right:0;bottom:26px;text-align:center"),
-                      fontSize: fs(11),
+                      fontSize: "0.6em",
                       color: st.accent,
                       opacity: 0.55,
                     }}
