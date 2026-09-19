@@ -49,17 +49,16 @@ export function SwipeDeck({ deck, onDone }: Props) {
 
   if (!book) return null;
 
-  const offset = exit === "right" ? 900 : exit === "left" ? -900 : drag;
-  const rotation = Math.max(-9, Math.min(9, offset / 28));
+  const offset = drag;
   const dragProgress = Math.max(-1, Math.min(1, drag / 180));
-  const turn = exit ? (exit === "right" ? -148 : 148) : dragProgress * -38;
-  const decisionOpacity = Math.max(0, Math.min(1, Math.abs(offset) / 120));
+  const turn = exit ? (exit === "right" ? 180 : -180) : dragProgress * 72;
+  const turningRight = exit ? exit === "left" : drag <= 0;
+  const decisionOffset = exit === "right" ? 180 : exit === "left" ? -180 : drag;
+  const decisionOpacity = Math.max(0, Math.min(1, Math.abs(decisionOffset) / 120));
   const bookStyle: CSSProperties & Record<"--book-accent" | "--page-turn" | "--turn-opacity", string> = {
-    transform: `translateX(${offset}px) rotate(${rotation}deg)`,
-    transition: exit || drag === 0 ? "transform 260ms ease-out" : "none",
     "--book-accent": book.accent,
     "--page-turn": `${turn}deg`,
-    "--turn-opacity": `${Math.min(0.2, Math.abs(turn) / 190)}`,
+    "--turn-opacity": `${Math.min(1, Math.abs(turn) / 24)}`,
   };
 
   return (
@@ -137,9 +136,12 @@ export function SwipeDeck({ deck, onDone }: Props) {
             </section>
 
             <div
-              className={`book-turning-page ${!hasInteracted && index === 0 ? "book-page-cue" : ""}`}
+              className={`book-turning-page ${turningRight ? "turn-from-right" : "turn-from-left"} ${!hasInteracted && index === 0 ? "book-page-cue" : ""}`}
               aria-hidden="true"
             >
+              <div className="book-turning-page-front">
+                <span className="book-leaf-mark">{turningRight ? String(index + 17).padStart(2, "0") : TRACK_LABELS[book.track]}</span>
+              </div>
               <div className="book-turning-page-back" />
             </div>
             <div className="book-gutter" aria-hidden="true" />
@@ -147,13 +149,13 @@ export function SwipeDeck({ deck, onDone }: Props) {
 
           <div
             className="decision-badge decision-keep"
-            style={{ opacity: offset > 0 ? decisionOpacity : 0 }}
+            style={{ opacity: decisionOffset > 0 ? decisionOpacity : 0 }}
           >
             <Heart className="h-4 w-4" /> Keep
           </div>
           <div
             className="decision-badge decision-pass"
-            style={{ opacity: offset < 0 ? decisionOpacity : 0 }}
+            style={{ opacity: decisionOffset < 0 ? decisionOpacity : 0 }}
           >
             <X className="h-4 w-4" /> Pass
           </div>
