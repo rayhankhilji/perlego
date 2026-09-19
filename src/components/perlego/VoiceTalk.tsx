@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useConversation } from "@elevenlabs/react";
+import { ConversationProvider, useConversation } from "@elevenlabs/react";
 import { mask, sx } from "@/lib/perlego/sx";
 import { PgButton } from "@/components/perlego/PgButton";
 import {
@@ -11,7 +11,18 @@ import {
 
 type Row = { who: "agent" | "you"; text: string };
 
-export function VoiceTalk({
+export function VoiceTalk(props: {
+  onInterests: (keys: string[], raw: string) => void;
+  onContinue: () => void;
+}) {
+  return (
+    <ConversationProvider>
+      <VoiceTalkInner {...props} />
+    </ConversationProvider>
+  );
+}
+
+function VoiceTalkInner({
   onInterests,
   onContinue,
 }: {
