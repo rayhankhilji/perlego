@@ -312,6 +312,7 @@ body {
   .book-stage { min-height: min(31rem, 61vh); }
   .book-spread { grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); }
   .book-verso, .book-recto { padding: 1.1rem; }
+  .book-kicker span:last-child { display: none; }
   .book-gutter { left: 35%; }
   .book-turning-page { width: 65%; }
   .book-copy { font-size: clamp(0.76rem, 3.15vw, 0.95rem); line-height: 1.5; }
