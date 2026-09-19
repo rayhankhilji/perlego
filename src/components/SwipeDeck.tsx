@@ -62,6 +62,8 @@ export function SwipeDeck({ deck, onDone }: Props) {
   // left leaf right.
   const turn = exit ? (exit === "right" ? -180 : 180) : dragProgress * -160;
   const turningRight = exit ? exit === "right" : drag >= 0;
+  const turnActive = Boolean(exit) || (dragging && Math.abs(drag) > 2);
+
   const decisionOffset = exit === "right" ? 180 : exit === "left" ? -180 : drag;
   const decisionOpacity = Math.max(0, Math.min(1, Math.abs(decisionOffset) / 120));
   const bookStyle: CSSProperties & Record<"--book-accent" | "--page-turn" | "--turn-opacity", string> = {
@@ -149,11 +151,17 @@ export function SwipeDeck({ deck, onDone }: Props) {
 
             <div
               className={`book-turning-page ${turningRight ? "turn-from-right" : "turn-from-left"} ${!dragging && !resetting ? "book-turning-page--animated" : ""} ${!hasInteracted && index === 0 ? "book-page-cue" : ""}`}
+              style={{
+                opacity: turnActive ? Math.min(1, Math.abs(turn) / 24) : 0,
+                visibility: turnActive ? "visible" : "hidden",
+                pointerEvents: "none",
+              }}
               aria-hidden="true"
             >
               <div className="book-turning-page-front" />
               <div className="book-turning-page-back" />
             </div>
+
             <div className="book-gutter" aria-hidden="true" />
           </div>
 
