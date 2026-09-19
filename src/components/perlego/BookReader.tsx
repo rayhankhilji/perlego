@@ -13,6 +13,37 @@ type Props = {
 };
 
 const EASE = "cubic-bezier(.22,.78,.14,1)";
+
+/** Shrinks the type a little until the whole page fits without clipping. */
+function FitBox({ children }: { children: React.ReactNode }) {
+  const box = useRef<HTMLDivElement | null>(null);
+  const [fit, setFit] = useState(1);
+
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    let scale = 1;
+    const run = () => {
+      scale = 1;
+      el.style.fontSize = "100%";
+      for (let i = 0; i < 14 && el.scrollHeight > el.clientHeight + 1; i += 1) {
+        scale -= 0.035;
+        el.style.fontSize = `${scale * 100}%`;
+      }
+      setFit(scale);
+    };
+    run();
+    const ro = new ResizeObserver(run);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [children]);
+
+  return (
+    <div ref={box} style={{ flex: 1, minHeight: 0, overflow: "hidden", fontSize: `${fit * 100}%` }}>
+      {children}
+    </div>
+  );
+}
 const DUR = 720;
 
 /** One full page per book, with a side panel of book details. */
@@ -109,8 +140,18 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
         {book ? (
           <>
             <img
+              key={book.gid}
               src={book.cover}
               alt={`Cover of ${book.title}`}
+              onError={(e) => {
+                const img = e.currentTarget;
+                if (img.dataset['fallback']) {
+                  img.style.display = "none";
+                  return;
+                }
+                img.dataset['fallback'] = "1";
+                img.src = book.thumb;
+              }}
               style={sx(
                 "width:118px;height:auto;border-radius:3px;background:#e9e7e3;box-shadow:0 2px 10px rgba(44,44,44,.18)",
               )}
@@ -234,7 +275,7 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
                       {b.label}
                     </p>
                   )}
-                  <div style={{ flex: 1, minHeight: 0, overflow: "hidden" }}>
+                  <FitBox>
                     {b.paras.map((para, pi) => (
                       <p
                         key={pi}
@@ -249,7 +290,7 @@ export function BookReader({ books, liked, onToggle, onIndex, onDone }: Props) {
                         {para}
                       </p>
                     ))}
-                  </div>
+                  </FitBox>
                   <span
                     style={{
                       ...sx("position:absolute;left:0;right:0;bottom:26px;text-align:center"),
