@@ -57,8 +57,11 @@ export function SwipeDeck({ deck, onDone }: Props) {
 
   const offset = drag;
   const dragProgress = Math.max(-1, Math.min(1, drag / 180));
-  const turn = exit ? (exit === "right" ? 180 : -180) : dragProgress * 72;
-  const turningRight = exit ? exit === "left" : drag <= 0;
+  // The page under the gesture turns inward across the spine: a rightward
+  // decision turns the right leaf left, while a leftward decision turns the
+  // left leaf right.
+  const turn = exit ? (exit === "right" ? -180 : 180) : dragProgress * -72;
+  const turningRight = exit ? exit === "right" : drag >= 0;
   const decisionOffset = exit === "right" ? 180 : exit === "left" ? -180 : drag;
   const decisionOpacity = Math.max(0, Math.min(1, Math.abs(decisionOffset) / 120));
   const pageContentOpacity = Math.max(0, Math.min(1, (84 - Math.abs(turn)) / 18));
