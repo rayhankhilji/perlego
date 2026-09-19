@@ -129,8 +129,9 @@ body {
 }
 
 .book-stage {
-  min-height: clamp(29rem, 68vh, 39rem);
-  perspective: 1600px;
+  width: min(100%, calc(74vh * 16 / 11));
+  aspect-ratio: 16 / 11;
+  perspective: 1800px;
 }
 
 .book {
@@ -352,7 +353,7 @@ body {
 }
 
 @media (max-width: 520px) {
-  .book-stage { min-height: min(31rem, 61vh); }
+  .book-stage { width: 100%; aspect-ratio: 4 / 5; }
   .book-verso, .book-recto { padding: 1.1rem; }
   .book-leaf-content { padding: 1.1rem; }
   .book-kicker span:last-child { display: none; }
