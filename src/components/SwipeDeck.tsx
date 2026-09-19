@@ -149,11 +149,17 @@ export function SwipeDeck({ deck, onDone }: Props) {
 
             <div
               className={`book-turning-page ${turningRight ? "turn-from-right" : "turn-from-left"} ${!dragging && !resetting ? "book-turning-page--animated" : ""} ${!hasInteracted && index === 0 ? "book-page-cue" : ""}`}
+              style={{
+                opacity: turnActive ? Math.min(1, Math.abs(turn) / 24) : 0,
+                visibility: turnActive ? "visible" : "hidden",
+                pointerEvents: "none",
+              }}
               aria-hidden="true"
             >
               <div className="book-turning-page-front" />
               <div className="book-turning-page-back" />
             </div>
+
             <div className="book-gutter" aria-hidden="true" />
           </div>
 
