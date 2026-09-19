@@ -507,7 +507,7 @@ button{font:inherit;cursor:pointer}
 @media (prefers-reduced-motion: reduce) { .pgw-run { animation: none; } }
 
 /* ---------- plan pill ---------- */
-.pgp-pill { position: relative; display: inline-flex; padding: 4px; border-radius: 999px; background: #f0efec; border: 1px solid #e9e7e3; }
+.pgp-pill { align-self: flex-start; position: relative; display: inline-flex; padding: 4px; border-radius: 999px; background: #f0efec; border: 1px solid #e9e7e3; }
 .pgp-thumb { position: absolute; top: 4px; bottom: 4px; border-radius: 999px; background: #fff; box-shadow: 0 1px 3px rgba(44,44,44,.14), 0 1px 2px rgba(144,48,7,.06); transition: left 200ms cubic-bezier(.4,0,.2,1), width 200ms cubic-bezier(.4,0,.2,1); }
 .pgp-seg { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border: none; background: none; cursor: pointer; border-radius: 999px; font: 600 14px Manrope, sans-serif; color: #666565; transition: color 140ms; }
 .pgp-seg[aria-checked="true"] { color: #3327ec; }
